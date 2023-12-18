@@ -34,6 +34,7 @@ class HomePage extends StatelessWidget {
           ),
           body:Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
                 height: 35,
@@ -42,6 +43,7 @@ class HomePage extends StatelessWidget {
                   controller.update();
                 },),
               ),
+              const SizedBox(height: 10,),
               Expanded(child: controller.currentWidget)
             ],
           )

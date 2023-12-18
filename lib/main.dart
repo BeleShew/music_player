@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (controller) {
-        return MaterialApp(
+        return GetMaterialApp(
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           ),
           themeMode: controller.themeMode,
           debugShowCheckedModeBanner: false,
-          themeAnimationCurve: Curves.bounceInOut,
+          // themeAnimationCurve: Curves.bounceInOut,
           home: const HomePage()
         );
       },

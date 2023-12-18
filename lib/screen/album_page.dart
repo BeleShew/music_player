@@ -13,8 +13,27 @@ class AlbumPage extends StatelessWidget {
         builder: (controller) {
           return
             SingleChildScrollView(
-            child: Container(
-              child: Text('Album list'),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:  controller.albums.isNotEmpty?
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: controller.albums.length,
+                  itemBuilder: (context,index){
+                    return ListTile(
+                      leading: const Icon(Icons.music_note_sharp),
+                      title: Text(controller.albums[index].artist??""),
+                      subtitle: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(controller.albums[index].album),
+                          Text("${controller.albums[index].numOfSongs}")
+                        ],
+                      ),
+                );
+              }):const Center(child: Text('Empty Album')),
             ),
           );
         }

@@ -14,8 +14,27 @@ class SongsPage extends StatelessWidget {
     return GetBuilder<SongsController>(
         builder: (controller) {
           return SingleChildScrollView(
-            child: Container(
-              child: Text('Songs list'),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:  controller.songList.isNotEmpty?
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.songList.length,
+                  itemBuilder: (context,index){
+                    return ListTile(
+                      leading: const Icon(Icons.music_note_sharp),
+                      title: Text(controller.songList[index].artist??""),
+                      subtitle: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(controller.songList[index].displayName),
+                          Text("${controller.songList[index].album}")
+                        ],
+                      ),
+                    );
+                  }):const Center(child: Text('Empty Song')),
             ),
           );
         }
