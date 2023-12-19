@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/controller/playlist_controller.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayListPage extends StatelessWidget {
    PlayListPage({super.key}){
@@ -21,7 +22,11 @@ class PlayListPage extends StatelessWidget {
                 itemCount: controller.playList.length,
                 itemBuilder: (context,index){
                   return ListTile(
-                    leading: const Icon(Icons.music_note_sharp),
+                    leading: QueryArtworkWidget(
+                      type: ArtworkType.PLAYLIST,
+                      id: controller.playList[index].id,
+                      nullArtworkWidget: const Icon(Icons.music_note_sharp),
+                    ),
                     title: Text(controller.playList[index].playlist),
                     subtitle: Column(
                       mainAxisSize: MainAxisSize.min,

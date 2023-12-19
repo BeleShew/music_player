@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import '../controller/album_controller.dart';
 
 class AlbumPage extends StatelessWidget {
@@ -22,7 +23,11 @@ class AlbumPage extends StatelessWidget {
                 itemCount: controller.albums.length,
                   itemBuilder: (context,index){
                     return ListTile(
-                      leading: const Icon(Icons.music_note_sharp),
+                      leading: QueryArtworkWidget(
+                      type: ArtworkType.ALBUM,
+                      id: controller.albums[index].id,
+                      nullArtworkWidget: const Icon(Icons.music_note_sharp),
+                    ),
                       title: Text(controller.albums[index].artist??""),
                       subtitle: Column(
                         mainAxisSize: MainAxisSize.min,

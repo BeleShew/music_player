@@ -28,4 +28,11 @@ class SongsController extends GetxController {
       }
     }
   }
+  playMusic(){
+    try{
+      
+    }catch(e){
+      print(e);
+    }
+  }
 }

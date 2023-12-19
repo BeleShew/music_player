@@ -15,10 +15,6 @@ class AlbumController extends GetxController {
       var results= await _audioQuery.permissionsRequest(retryRequest: true);
       if(results){
         albums = await _audioQuery.queryAlbums();
-        if(albums.isNotEmpty){
-        }else{
-          Get.snackbar("Empty", "You don't have Album");
-        }
       }
       else{
         Get.snackbar("Permisson", "You don't have give permission");

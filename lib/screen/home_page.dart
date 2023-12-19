@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/controller/home_controller.dart';
-import 'package:music_player/screen/album_page.dart';
-import 'package:music_player/screen/playlist_page.dart';
-import 'package:music_player/screen/songs_page.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import '../widget/title_widget.dart';
 
 class HomePage extends StatelessWidget {
