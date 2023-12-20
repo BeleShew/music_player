@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:music_player/controller/music_player_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../model/songs_model.dart';
+
 class MusicPlayer extends StatelessWidget {
   MusicPlayer({super.key, required this.selectedMusic}) {
    var controllers= Get.put(MusicPlayerController());
     controllers.playSongs(selectedMusic.uri);
   }
-  SongModel selectedMusic;
+  SongList selectedMusic;
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MusicPlayerController>(builder: (logic) {
@@ -37,7 +39,7 @@ class MusicPlayer extends StatelessWidget {
                           ),
                           child: QueryArtworkWidget(
                             artworkFit:BoxFit.fitWidth,
-                            id: selectedMusic.id,
+                            id: selectedMusic.id??0,
                             type: ArtworkType.AUDIO,
                             artworkHeight: double.infinity,
                             artworkWidth: double.infinity,
@@ -69,7 +71,7 @@ class MusicPlayer extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   const SizedBox(height: 30,),
-                                  Text(selectedMusic.title,style:const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                  Text(selectedMusic.title??"",style:const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                                   const SizedBox(height: 10,),
                                   // Text(selectedMusic.artist??"",style: TextStyle(fontSize: 14,fontWeight: FontWeight.normal),),
                                   Row(

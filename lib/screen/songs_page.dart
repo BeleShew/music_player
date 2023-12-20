@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../controller/songs_controller.dart';
+import '../model/songs_model.dart';
+import 'music_player_page.dart';
 
 class SongsPage extends StatelessWidget {
   SongsPage({super.key}){
@@ -37,7 +39,7 @@ class SongsPage extends StatelessWidget {
                         ],
                       ),
                       onTap: () async{
-                        // Get.to(()=>MusicPlayer(selectedMusic: controller.allSongs.songList?[index]??SongModel(),));
+                        Get.to(()=>MusicPlayer(selectedMusic: controller.allSongs.songList?[index]??SongList(),));
                         // await PlayAudioMusic.playMusic(url: controller.songList[index].uri??"");
                       },
                     );
