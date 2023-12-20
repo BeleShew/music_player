@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/screen/album_page.dart';
-import 'package:music_player/screen/playlist_page.dart';
+import 'package:music_player/screen/artist_page.dart';
 import 'package:music_player/screen/songs_page.dart';
 import '../util/constants.dart';
 
@@ -9,7 +9,7 @@ class TitleController extends GetxController {
   int selectedIndex = 0;
   List<Widget> titleList=[];
   Widget homepage=Container();
-  List<String> titleString=["Playlists","Songs","Albums"];
+  List<String> titleString=["Songs","Artists","Albums"];
   TitleController(){
     buildSelectedHomePage();
     buildTitleWidget();
@@ -41,10 +41,10 @@ class TitleController extends GetxController {
   }
   buildSelectedHomePage(){
     if(selectedIndex==0){
-      homepage=PlayListPage();
+      homepage=SongsPage();
     }
     else if(selectedIndex==1){
-      homepage=SongsPage();
+      homepage=ArtistPage();
     }
     else if(selectedIndex==2){
       homepage=AlbumPage();

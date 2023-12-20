@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/util/shared_preferences/shared_preferences.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -9,10 +10,50 @@ import '../util/constants.dart';
 class SongsController extends GetxController {
   final OnAudioQuery _audioQuery = OnAudioQuery();
   SongsModel allSongs=SongsModel();
+  SongsModel simplifiedSongs=SongsModel();
   bool isLoadAllData=false;
+  final ScrollController scrollController = ScrollController();
+  int itemsPerPage = 50;
+  int loadedItems = 50;
    SongsController() {
     getSongList();
   }
+
+  @override
+  void onInit() {
+    super.onInit();
+    scrollController.addListener(_scrollListener);
+  }
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+@override
+  void onClose() {
+    super.onClose();
+    scrollController.dispose();
+  }
+  void _scrollListener() {
+    if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+      if (loadedItems < allSongs.songList!.length) {
+        int endIndex = loadedItems + itemsPerPage;
+        if(endIndex<allSongs.songList!.length){
+          simplifiedSongs.songList!.addAll(
+            allSongs.songList!.sublist(loadedItems, endIndex),
+          );
+        }else{
+          simplifiedSongs.songList!.addAll(
+            allSongs.songList!.sublist(loadedItems, allSongs.songList!.length),
+          );
+        }
+        loadedItems = endIndex;
+      }
+      update();
+    }
+  }
+
+
   void getSongList() async {
     try{
       isLoadAllData=false;
@@ -65,6 +106,10 @@ class SongsController extends GetxController {
       else{
         Get.snackbar("Permisson", "You don't have give permission");
       }
+      simplifiedSongs=SongsModel(
+        songList: allSongs.songList?.take(50).toList(),
+        expireDate: allSongs.expireDate,
+      );
       isLoadAllData=true;
       update();
     }catch(ex){

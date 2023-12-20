@@ -15,31 +15,25 @@ class SongsPage extends StatelessWidget {
     return GetBuilder<SongsController>(
         builder: (controller) {
           return SingleChildScrollView(
+            controller:controller.scrollController,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: controller.isLoadAllData&& controller.allSongs.songList!=null&& controller.allSongs.songList!.isNotEmpty?
+              child: controller.isLoadAllData&& controller.simplifiedSongs.songList!=null&& controller.simplifiedSongs.songList!.isNotEmpty?
               ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: (controller.allSongs.songList!.length/20).ceil(),
+                  itemCount: controller.simplifiedSongs.songList?.length,
                   itemBuilder: (context,index){
                     return ListTile(
                       leading: QueryArtworkWidget(
                         type: ArtworkType.AUDIO,
-                        id: controller.allSongs.songList?[index].id??0,
+                        id: controller.simplifiedSongs.songList?[index].id??0,
                         nullArtworkWidget: const Icon(Icons.music_note_sharp),
                       ),
-                      title: Text(controller.allSongs.songList?[index].title??""),
-                      subtitle: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(controller.allSongs.songList?[index].artist??""),
-                          // Text("${controller.songList[index].album}")
-                        ],
-                      ),
+                      title: Text(controller.simplifiedSongs.songList?[index].title??"",style:const TextStyle(fontWeight: FontWeight.bold),),
+                      subtitle: Text(controller.simplifiedSongs.songList?[index].artist??""),
                       onTap: () async{
-                        Get.to(()=>MusicPlayer(selectedMusic: controller.allSongs.songList?[index]??SongList(),));
+                        Get.to(()=>MusicPlayer(selectedMusic: controller.simplifiedSongs.songList?[index]??SongList(),));
                         // await PlayAudioMusic.playMusic(url: controller.songList[index].uri??"");
                       },
                     );
