@@ -68,7 +68,7 @@ class SongsController extends GetxController {
           }
         }
         else{
-          List<SongModel> songsList = await _audioQuery.querySongs();
+          List<SongModel> songsList = await _audioQuery.querySongs(ignoreCase:true);
           if(songsList.isNotEmpty){
             List<SongList> songList=songsList.map((e) =>  SongList()..uri=e.uri
               ..artist=e.artist

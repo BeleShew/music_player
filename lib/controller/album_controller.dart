@@ -14,7 +14,7 @@ class AlbumController extends GetxController {
     try{
       var results= await _audioQuery.permissionsRequest(retryRequest: true);
       if(results){
-        albums = await _audioQuery.queryAlbums();
+        albums = await _audioQuery.queryAlbums(ignoreCase:true);
       }
       else{
         Get.snackbar("Permisson", "You don't have give permission");
