@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../controller/songs_controller.dart';
-import 'music_player_page.dart';
 
 class SongsPage extends StatelessWidget {
   SongsPage({super.key}){
-    Get.put(SongsController());
+    // Get.lazyPut(()=>SongsController());
   }
 
   @override
@@ -16,33 +15,41 @@ class SongsPage extends StatelessWidget {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child:  controller.songList.isNotEmpty?
+              child: controller.isLoadAllData&& controller.allSongs.songList!=null&& controller.allSongs.songList!.isNotEmpty?
               ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.songList.length,
+                  itemCount: (controller.allSongs.songList!.length/20).ceil(),
                   itemBuilder: (context,index){
                     return ListTile(
                       leading: QueryArtworkWidget(
                         type: ArtworkType.AUDIO,
-                        id: controller.songList[index].id,
+                        id: controller.allSongs.songList?[index].id??0,
                         nullArtworkWidget: const Icon(Icons.music_note_sharp),
                       ),
-                      title: Text(controller.songList[index].title),
+                      title: Text(controller.allSongs.songList?[index].title??""),
                       subtitle: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(controller.songList[index].artist??""),
+                          Text(controller.allSongs.songList?[index].artist??""),
                           // Text("${controller.songList[index].album}")
                         ],
                       ),
                       onTap: () async{
-                        Get.to(()=>MusicPlayer(selectedMusic: controller.songList[index],));
+                        // Get.to(()=>MusicPlayer(selectedMusic: controller.allSongs.songList?[index]??SongModel(),));
                         // await PlayAudioMusic.playMusic(url: controller.songList[index].uri??"");
                       },
                     );
-                  }):const Center(child: Text('Empty Song')),
+                  }):
+               Center(
+                  child: CircularProgressIndicator(
+                    // color: Colors.green.shade200,
+                    valueColor:AlwaysStoppedAnimation<Color>(Colors.red.shade300),
+                    backgroundColor: Colors.yellow.shade200,
+                    strokeWidth:2,
+              ),
+              ),
             ),
           );
         }
