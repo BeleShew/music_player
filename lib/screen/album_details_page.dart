@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:music_player/controller/album_details_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../model/songs_model.dart';
+import 'music_player_page.dart';
+
 class AlbumDetailsPage extends StatelessWidget {
   AlbumDetailsPage({super.key, required this.selectedAlbum}){
     Get.delete<AlbumDetailsController>(force: true);
@@ -33,7 +36,33 @@ class AlbumDetailsPage extends StatelessWidget {
                       title: Text(controller.songList[index].title,style:const TextStyle(fontWeight: FontWeight.bold),),
                       subtitle: Text(controller.songList[index].artist??""),
                       onTap: () async{
-                        // Get.to(()=>MusicPlayer(selectedMusic: controller.songList?[index]??SongList(),));
+                        var selectedSongs=SongList()
+                          ..id=controller.songList[index].id
+                          ..genre=controller.songList[index].genre
+                          ..isAlarm=controller.songList[index].isAlarm
+                          ..isAudiobook=controller.songList[index].isAudioBook
+                          ..isMusic=controller.songList[index].isMusic
+                          ..isNotification=controller.songList[index].isNotification
+                          ..isPodcast=controller.songList[index].isPodcast
+                          ..isRingtone=controller.songList[index].isRingtone
+                          ..size=controller.songList[index].size
+                          ..title=controller.songList[index].title
+                          ..track=controller.songList[index].track
+                          ..uri=controller.songList[index].uri
+                          ..album=controller.songList[index].album
+                          ..albumArtist=controller.songList[index].artist
+                          ..albumId=controller.songList[index].albumId
+                          ..artist=controller.songList[index].artist
+                          ..data=controller.songList[index].data
+                          ..dateAdded=controller.songList[index].dateAdded
+                          ..dateModified=controller.songList[index].dateModified
+                          ..displayName=controller.songList[index].displayName
+                          ..displayNameWoExt=controller.songList[index].displayNameWOExt
+                          ..duration=controller.songList[index].duration
+                          ..fileExtension=controller.songList[index].fileExtension
+                          ..composer=controller.songList[index].composer
+                        ;
+                        Get.to(()=>MusicPlayer(selectedMusic: selectedSongs,));
                       },
                     );
                   }):
