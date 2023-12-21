@@ -37,39 +37,13 @@ class ArtistDetailsPage extends StatelessWidget {
                     return ListTile(
                       leading: QueryArtworkWidget(
                         type: ArtworkType.AUDIO,
-                        id: controller.artistList[index].id,
+                        id: controller.artistList[index].id??0,
                         nullArtworkWidget: const Icon(Icons.music_note_sharp),
                       ),
-                      title: Text(controller.artistList[index].title,style:const TextStyle(fontWeight: FontWeight.bold),),
+                      title: Text(controller.artistList[index].title??"",style:const TextStyle(fontWeight: FontWeight.bold),),
                       subtitle: Text(controller.artistList[index].artist??""),
                       onTap: () async{
-                        var selectedSongs=SongList()
-                        ..id=controller.artistList[index].id
-                        ..genre=controller.artistList[index].genre
-                        ..isAlarm=controller.artistList[index].isAlarm
-                        ..isAudiobook=controller.artistList[index].isAudioBook
-                        ..isMusic=controller.artistList[index].isMusic
-                        ..isNotification=controller.artistList[index].isNotification
-                        ..isPodcast=controller.artistList[index].isPodcast
-                        ..isRingtone=controller.artistList[index].isRingtone
-                        ..size=controller.artistList[index].size
-                        ..title=controller.artistList[index].title
-                        ..track=controller.artistList[index].track
-                        ..uri=controller.artistList[index].uri
-                        ..album=controller.artistList[index].album
-                        ..albumArtist=controller.artistList[index].artist
-                        ..albumId=controller.artistList[index].albumId
-                        ..artist=controller.artistList[index].artist
-                        ..data=controller.artistList[index].data
-                        ..dateAdded=controller.artistList[index].dateAdded
-                        ..dateModified=controller.artistList[index].dateModified
-                        ..displayName=controller.artistList[index].displayName
-                        ..displayNameWoExt=controller.artistList[index].displayNameWOExt
-                        ..duration=controller.artistList[index].duration
-                        ..fileExtension=controller.artistList[index].fileExtension
-                        ..composer=controller.artistList[index].composer
-                        ;
-                        Get.to(()=>MusicPlayer(selectedMusic: selectedSongs,),);
+                        Get.to(()=>MusicPlayer(selectedMusic: controller.artistList,currentMusicIndex:index ,),);
                         // MusicPlayer(selectedMusic: selectedSongs,).musicPlayer(context);
                       },
                     );

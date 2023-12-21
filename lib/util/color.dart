@@ -9,7 +9,7 @@ class RandomColors{
       random.nextInt(256),
       random.nextInt(256),
       random.nextInt(256),
-      0.6,
+      0.4,
     );
   }
 }
