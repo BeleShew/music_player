@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_player/screen/album_details_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../controller/album_controller.dart';
 
@@ -32,7 +33,7 @@ class AlbumPage extends StatelessWidget {
                       subtitle: Text(controller.albums[index].artist??"",style:const TextStyle(fontWeight: FontWeight.normal),),
                       trailing:const Icon(Icons.arrow_forward_ios_rounded,size: 14,),
                       onTap: (){
-
+                        Get.to(()=>AlbumDetailsPage(selectedAlbum:controller.albums[index]));
                       },
                 );
               }):Center(

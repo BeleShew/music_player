@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/controller/artist_controller.dart';
+import 'package:music_player/screen/artist_details_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class ArtistPage extends StatelessWidget {
@@ -40,7 +41,7 @@ class ArtistPage extends StatelessWidget {
                       ),
                       trailing:const Icon(Icons.arrow_forward_ios_rounded,size: 14,),
                       onTap: (){
-
+                        Get.to(()=>ArtistDetailsPage(selectedArtist: controller.artistList[index]));
                       },
                     );
                   }):Center(

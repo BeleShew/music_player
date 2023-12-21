@@ -10,5 +10,7 @@ class ControllerInit{
     Get.lazyPut(()=>PlayListController(),fenix: true);
     Get.lazyPut(()=>AlbumController(),fenix: true);
     Get.lazyPut(()=>ArtistController(),fenix: true);
+    // Get.lazyPut(()=>AlbumDetailsController(),fenix: true);
+    // Get.lazyPut(()=>ArtistDetailsController(),fenix: true);
   }
 }
