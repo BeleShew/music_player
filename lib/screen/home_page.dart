@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Music",),
+            title: const Text("Music",style: TextStyle(fontSize: 18),),
             centerTitle: true,
             leading: InkWell(
               onTap: (){
