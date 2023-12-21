@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/controller/home_controller.dart';
+import '../widget/bottom_navigation_bar.dart';
 import '../widget/title_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -42,7 +43,8 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 10,),
               Expanded(child: controller.currentWidget)
             ],
-          )
+          ),
+          bottomNavigationBar: BottomNavBar(),
         );
       },
     );
