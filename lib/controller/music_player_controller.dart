@@ -21,7 +21,7 @@ String position="";
 double max=0;
 int musicIndex=0;
 List<SongList> selectedMusic;
-MusicPlayerController({required this.selectedMusic,required this.musicIndex}) {
+MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool isNotFromRecent=true}) {
   try {
     audioQuery=OnAudioQuery();
     audioPlayer=AudioPlayer();
@@ -40,7 +40,9 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex}) {
       }
       update();
     });
-    playSongs(selectedMusic[musicIndex].uri);
+    if(!isNotFromRecent){
+      playSongs(selectedMusic[musicIndex].uri);
+    }
   } catch (e) {
     if (kDebugMode) {
       print(e);

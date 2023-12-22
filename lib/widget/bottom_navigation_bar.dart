@@ -7,7 +7,8 @@ import '../util/color.dart';
 
 class BottomNavBar extends StatelessWidget {
    BottomNavBar({super.key,required List<SongList> selectedMusic,required int musicIndex}){
-    Get.lazyPut(() => BottomNavBarController(selectedMusic: selectedMusic,musicIndex: musicIndex),fenix: true);
+     Get.delete<BottomNavBarController>(force: true);
+     Get.put(BottomNavBarController(music: selectedMusic,index: musicIndex));
   }
 
   @override
@@ -15,7 +16,7 @@ class BottomNavBar extends StatelessWidget {
 
     return GetBuilder<BottomNavBarController>(
         builder: (controllers) {
-          var playMusic= Get.put(MusicPlayerController(selectedMusic:controllers.selectedMusic,musicIndex: controllers.musicIndex ));
+          var playMusic= Get.put(MusicPlayerController(selectedMusic:controllers.selectedMusic??[],musicIndex: controllers.musicIndex ));
           return Container(
             margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
             decoration: BoxDecoration(
@@ -38,16 +39,16 @@ class BottomNavBar extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(controllers.selectedMusic[controllers.musicIndex].album??"",
+                      Text(controllers.selectedMusic?[controllers.musicIndex].album??"",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(controllers.selectedMusic[controllers.musicIndex].artist??""),
+                      Text(controllers.selectedMusic?[controllers.musicIndex].artist??""),
                     ],
                   ),
                 ),
                 InkWell(
                   onTap: (){
-                   playMusic.playSongs(controllers.selectedMusic[controllers.musicIndex].uri);
+                   playMusic.playSongs(controllers.selectedMusic?[controllers.musicIndex].uri);
                   },
                     child: const Icon(Icons.play_circle_outline_rounded, size: 35,),
                 ),
@@ -55,7 +56,7 @@ class BottomNavBar extends StatelessWidget {
                 InkWell(
                   onTap: (){
                     playMusic.musicIndex=controllers.musicIndex;
-                    playMusic.selectedMusic=controllers.selectedMusic;
+                    playMusic.selectedMusic=controllers.selectedMusic??[];
                     playMusic.playNextSong();
                     playMusic.update();
                   },
