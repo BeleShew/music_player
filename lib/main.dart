@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:music_player/controller/home_controller.dart';
 import 'package:music_player/screen/home_page.dart';
 import 'package:music_player/util/controllers_init.dart';
 import 'package:music_player/util/shared_preferences/shared_preferences.dart';
 
 void main() async{
-  // await Hives.initHive();
   runApp(const MyApp());
   Get.put(HomeController());
   Sharedpreferences.initSharedPreference();

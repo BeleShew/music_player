@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/controller/home_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../model/songs_model.dart';
+import '../util/constants.dart';
+import '../util/shared_preferences/shared_preferences.dart';
 
 class MusicPlayerController extends GetxController {
 bool isPlaying=true;
@@ -121,6 +126,25 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex}) {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+  popUpMusicPlayer()async{
+    try {
+      RecentSongList recentSongList=RecentSongList()
+        ..currentMusicIndex=musicIndex
+        ..songList=selectedMusic;
+      String songStringList=json.encode(recentSongList.toJson());
+      await Sharedpreferences.saveValues(key: CatchConstantKeys.recentSongListKey,values: songStringList,valueTypeToSaved: PreferenceType.isString,isStringList:false);
+
+      var updateHomeController=Get.find<HomeController>();
+      updateHomeController.musicIndex=musicIndex;
+      updateHomeController.selectedMusic=selectedMusic;
+      updateHomeController.update();
+
+      Get.back();
+      update();
+    } catch (e) {
+      print(e);
     }
   }
 }

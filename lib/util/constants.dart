@@ -8,9 +8,10 @@ class Keys{
   static Color textWhiteColor=const Color(0xffffffff);
   static Color textBlackColor=const Color(0xff000000);
 }
-class HiveConstants{
+class CatchConstantKeys{
   static String hiveBoxName="MusicPlayerHive";
   static String songListKey="SongCatch";
+  static String recentSongListKey="RecentSongLis";
   static String albumListKey="AlbumCatch";
   static String playListKey="PlayListCatch";
 }

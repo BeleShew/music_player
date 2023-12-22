@@ -143,3 +143,25 @@ class SongList {
     "_id": id,
   };
 }
+
+
+RecentSongList recentSongListFromJson(String str) => RecentSongList.fromJson(json.decode(str));
+String recentSongListToJson(RecentSongList data) => json.encode(data.toJson());
+class RecentSongList{
+  List<SongList>? songList;
+  int? currentMusicIndex;
+  RecentSongList({
+    this.songList,
+    this.currentMusicIndex,
+  });
+
+  factory RecentSongList.fromJson(Map<String, dynamic> json) => RecentSongList(
+    songList: json["songList"] == null ? [] : List<SongList>.from(json["songList"]!.map((x) => SongList.fromJson(x))),
+    currentMusicIndex:json["currentMusicIndex"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "songList": songList == null ? [] : List<dynamic>.from(songList!.map((x) => x.toJson())),
+    "currentMusicIndex": currentMusicIndex,
+  };
+}

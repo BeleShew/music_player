@@ -59,7 +59,7 @@ class SongsController extends GetxController {
       isLoadAllData=false;
       var results= await _audioQuery.permissionsRequest(retryRequest: true);
       if(results){
-        var catchSong= await Sharedpreferences.getStringListValuesSF(key:HiveConstants.songListKey);
+        var catchSong= await Sharedpreferences.getStringListValuesSF(key:CatchConstantKeys.songListKey);
         if(catchSong!=null && catchSong.isNotEmpty){
           var decoded= await convertModelToJson(catchSong);
           if(decoded!=null){
@@ -98,7 +98,7 @@ class SongsController extends GetxController {
               ..id=e.id).toList();
             var tempString= await convertModelToString(songList);
             var model=SongsModel(expireDate: DateTime.now(),songList: songList);
-            Sharedpreferences.saveValues(key: HiveConstants.songListKey,values: tempString,valueTypeToSaved: PreferenceType.isString,isStringList:true);
+            Sharedpreferences.saveValues(key: CatchConstantKeys.songListKey,values: tempString,valueTypeToSaved: PreferenceType.isString,isStringList:true);
             allSongs=model;
           }
         }
