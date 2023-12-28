@@ -8,14 +8,14 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 import '../model/songs_model.dart';
 import '../util/constants.dart';
+import '../util/play_music.dart';
+import '../util/recent_music.dart';
 import '../util/shared_preferences/shared_preferences.dart';
 
 class MusicPlayerController extends GetxController {
 bool isPlaying=false;
 bool isRepeatEnabled=false;
 double sliderValue = 0.0;
-late OnAudioQuery audioQuery;
-late AudioPlayer audioPlayer;
 String duration="";
 String position="";
 double max=0;
@@ -24,14 +24,12 @@ List<SongList> selectedMusic;
 MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool isPlayMusic=false}) {
   try {
     isPlaying=isPlayMusic;
-    audioQuery=OnAudioQuery();
-    audioPlayer=AudioPlayer();
-    audioPlayer.durationStream.listen((event) {
+    AudioPlayerSingleton.audioPlayer.durationStream.listen((event) {
       duration=event.toString().split(".")[0];
       max=event?.inSeconds.toDouble()??0;
       update();
     });
-    audioPlayer.positionStream.listen((event){
+    AudioPlayerSingleton.audioPlayer.positionStream.listen((event){
       position=event.toString().split(".")[0];
       sliderValue=event.inSeconds.toDouble().clamp(0, max);
       if (isPlaying && position == duration){
@@ -53,8 +51,8 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool
 
   @override
   void onClose(){
-    audioPlayer.dispose();
-    audioPlayer.stop();
+    // AudioPlayerSingleton.audioPlayer.dispose();
+    // AudioPlayerSingleton.audioPlayer.stop();
   }
   repeatMusic() async{
     try {
@@ -73,7 +71,7 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool
   }
   playNextSong()async{
     try{
-      await audioPlayer.pause();
+      await AudioPlayerSingleton.audioPlayer.pause();
       if (musicIndex < selectedMusic.length-1) {
         musicIndex++;
       }
@@ -96,7 +94,7 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool
   }
   playPreviousSong()async{
   try{
-    await audioPlayer.pause();
+    await AudioPlayerSingleton.audioPlayer.pause();
     if (musicIndex > 0) {
       musicIndex--;
     }
@@ -118,24 +116,24 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool
 }
   changeDurationToSecond(second){
     var durations=Duration(seconds: second);
-    audioPlayer.seek(durations);
+    AudioPlayerSingleton.audioPlayer.seek(durations);
     update();
   }
-Duration parseDuration(String timeString) {
-  List<String> parts = timeString.split(':');
-  if (parts.length == 3) {
-    int hours = int.parse(parts[0]);
-    int minutes = int.parse(parts[1]);
-    int seconds = int.parse(parts[2]);
-    return Duration(hours: hours, minutes: minutes, seconds: seconds);
-  } else {
-    throw const FormatException("Invalid time duration format");
+  Duration parseDuration(String timeString) {
+    List<String> parts = timeString.split(':');
+    if (parts.length == 3) {
+      int hours = int.parse(parts[0]);
+      int minutes = int.parse(parts[1]);
+      int seconds = int.parse(parts[2]);
+      return Duration(hours: hours, minutes: minutes, seconds: seconds);
+    } else {
+      throw const FormatException("Invalid time duration format");
+    }
   }
-}
   playSongs(url)async{
     try{
-      await audioPlayer.setUrl(url);
-      await audioPlayer.play();
+      await AudioPlayerSingleton.audioPlayer.setUrl(url);
+      await AudioPlayerSingleton.audioPlayer.play();
     }catch(e){
       if (kDebugMode) {
         print(e);
@@ -144,21 +142,13 @@ Duration parseDuration(String timeString) {
   }
   popUpMusicPlayer()async{
     try {
-      RecentSongList recentSongList=RecentSongList()
-        ..currentMusicIndex=musicIndex
-        ..songList=selectedMusic;
-      String songStringList=json.encode(recentSongList.toJson());
-      await Sharedpreferences.saveValues(key: CatchConstantKeys.recentSongListKey,values: songStringList,valueTypeToSaved: PreferenceType.isString,isStringList:false);
-
-      var updateHomeController=Get.find<HomeController>();
-      updateHomeController.musicIndex=musicIndex;
-      updateHomeController.selectedMusic=selectedMusic;
-      updateHomeController.update();
-
+      await RecentMusics.saveRecentMusic(recent: RecentSongList(songList: selectedMusic,currentMusicIndex:musicIndex));
       Get.back();
       update();
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:music_player/controller/music_player_controller.dart';
 import '../controller/bottom_navigation_bar_controller.dart';
-import '../model/songs_model.dart';
 import '../screen/music_player_page.dart';
 import '../util/color.dart';
+import '../util/play_music.dart';
 
 class BottomNavBar extends StatelessWidget {
-   BottomNavBar({super.key,required List<SongList> selectedMusic,required int musicIndex}){
+   BottomNavBar({super.key}){
      Get.delete<BottomNavBarController>(force: true);
-     Get.put(BottomNavBarController(music: selectedMusic,index: musicIndex));
+     Get.put(BottomNavBarController());
   }
-
   @override
   Widget build(BuildContext context) {
-
     return GetBuilder<BottomNavBarController>(
         builder: (controllers) {
-          var playMusic= Get.put(MusicPlayerController(selectedMusic:controllers.selectedMusic??[],musicIndex: controllers.musicIndex ));
-          return InkWell(
+          return
+            controllers.selectedMusic!=null&& controllers.selectedMusic!.isNotEmpty?
+            InkWell(
             onTap: (){
               Get.to(()=>MusicPlayer(selectedMusic:controllers.selectedMusic??[],currentMusicIndex: controllers.musicIndex,isPlayMusic: false,));
             },
@@ -53,17 +51,18 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: (){
-                     playMusic.playSongs(controllers.selectedMusic?[controllers.musicIndex].uri);
+                      controllers.playSongs();
+                      controllers.update();
                     },
-                      child:playMusic.isPlaying?const Icon(Icons.pause_circle_outlined) : const Icon(Icons.play_circle_outline_rounded, size: 35,),
+                      child:AudioPlayerSingleton.audioPlayer.playing?const Icon(Icons.pause_circle_outlined,size: 35,) : const Icon(Icons.play_circle_outline_rounded, size: 35,),
                   ),
                   const SizedBox(width: 20,),
                   InkWell(
                     onTap: (){
-                      playMusic.musicIndex=controllers.musicIndex;
-                      playMusic.selectedMusic=controllers.selectedMusic??[];
-                      playMusic.playNextSong();
-                      playMusic.update();
+                      // controllers.musicIndex=controllers.musicIndex;
+                      // controllers.selectedMusic=controllers.selectedMusic??[];
+                      controllers.playNextSong();
+                      controllers.update();
                     },
                     child: const Icon(Icons.skip_next_rounded, size: 35,),
                   ),
@@ -71,7 +70,7 @@ class BottomNavBar extends StatelessWidget {
                 ],
               ),
             ),
-          );
+          ):Container(height: 5,);
         });
   }
 }

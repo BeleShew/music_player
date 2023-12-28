@@ -6,6 +6,7 @@ import 'package:music_player/controller/music_player_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../model/songs_model.dart';
 import '../util/color.dart';
+import '../util/play_music.dart';
 
 class MusicPlayer extends StatelessWidget {
   MusicPlayer({super.key, required List<SongList> selectedMusic, required int currentMusicIndex,bool isPlayMusic=false}) {
@@ -142,17 +143,17 @@ class MusicPlayer extends StatelessWidget {
                                   }
                                 } else {
                                   logic.isPlaying = !logic.isPlaying;
-                                  if (logic.audioPlayer.playing) {
-                                    logic.audioPlayer.pause();
+                                  if (AudioPlayerSingleton.audioPlayer.playing) {
+                                    AudioPlayerSingleton.audioPlayer.pause();
                                   }
                                   else {
-                                    logic.audioPlayer.setUrl(logic.selectedMusic[logic.musicIndex].uri??"",initialPosition:logic.parseDuration(logic.position));
-                                    logic.audioPlayer.play();
+                                    AudioPlayerSingleton.audioPlayer.setUrl(logic.selectedMusic[logic.musicIndex].uri??"",initialPosition:logic.parseDuration(logic.position));
+                                    AudioPlayerSingleton.audioPlayer.play();
                                   }
                                 }
                                 logic.update();
                               },
-                              child: (logic.isPlaying &&
+                              child: (AudioPlayerSingleton.audioPlayer.playing&&
                                   logic.position != logic.duration)
                                   ? const Icon(
                                 Icons.pause_circle_outlined,

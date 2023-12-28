@@ -44,7 +44,8 @@ class HomePage extends StatelessWidget {
               Expanded(child: controller.currentWidget)
             ],
           ),
-          bottomNavigationBar:controller.selectedMusic!=null &&controller.selectedMusic!.isNotEmpty? BottomNavBar(selectedMusic: controller.selectedMusic??[],musicIndex: controller.musicIndex,):Container(height: 5,),
+          bottomNavigationBar:BottomNavBar(),
+          // bottomNavigationBar:controller.selectedMusic!=null &&controller.selectedMusic!.isNotEmpty? BottomNavBar(selectedMusic: controller.selectedMusic??[],musicIndex: controller.musicIndex,):Container(height: 5,),
         );
       },
     );
