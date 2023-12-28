@@ -142,10 +142,11 @@ class MusicPlayer extends StatelessWidget {
                                   }
                                 } else {
                                   logic.isPlaying = !logic.isPlaying;
-                                  if (!logic.isPlaying) {
+                                  if (logic.audioPlayer.playing) {
                                     logic.audioPlayer.pause();
                                   }
                                   else {
+                                    logic.audioPlayer.setUrl(logic.selectedMusic[logic.musicIndex].uri??"",initialPosition:logic.parseDuration(logic.position));
                                     logic.audioPlayer.play();
                                   }
                                 }

@@ -11,7 +11,7 @@ import '../util/constants.dart';
 import '../util/shared_preferences/shared_preferences.dart';
 
 class MusicPlayerController extends GetxController {
-bool isPlaying=true;
+bool isPlaying=false;
 bool isRepeatEnabled=false;
 double sliderValue = 0.0;
 late OnAudioQuery audioQuery;
@@ -23,6 +23,7 @@ int musicIndex=0;
 List<SongList> selectedMusic;
 MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool isPlayMusic=false}) {
   try {
+    isPlaying=isPlayMusic;
     audioQuery=OnAudioQuery();
     audioPlayer=AudioPlayer();
     audioPlayer.durationStream.listen((event) {
@@ -120,6 +121,17 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool
     audioPlayer.seek(durations);
     update();
   }
+Duration parseDuration(String timeString) {
+  List<String> parts = timeString.split(':');
+  if (parts.length == 3) {
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+    int seconds = int.parse(parts[2]);
+    return Duration(hours: hours, minutes: minutes, seconds: seconds);
+  } else {
+    throw const FormatException("Invalid time duration format");
+  }
+}
   playSongs(url)async{
     try{
       await audioPlayer.setUrl(url);
