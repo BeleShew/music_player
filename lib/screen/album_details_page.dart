@@ -44,7 +44,7 @@ class AlbumDetailsPage extends StatelessWidget {
                       title: Text(controller.songList[index].title??"",style:const TextStyle(fontWeight: FontWeight.bold),),
                       subtitle: Text(controller.songList[index].artist??""),
                       onTap: () async{
-                        Get.to(()=>MusicPlayer(selectedMusic: controller.songList,currentMusicIndex: index,));
+                        Get.to(()=>MusicPlayer(selectedMusic: controller.songList,currentMusicIndex: index,isPlayMusic: true,));
                       },
                     );
                   }):

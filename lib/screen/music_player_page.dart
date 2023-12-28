@@ -8,10 +8,9 @@ import '../model/songs_model.dart';
 import '../util/color.dart';
 
 class MusicPlayer extends StatelessWidget {
-  MusicPlayer({super.key, required List<
-      SongList> selectedMusic, required int currentMusicIndex}) {
+  MusicPlayer({super.key, required List<SongList> selectedMusic, required int currentMusicIndex,bool isPlayMusic=false}) {
     Get.delete<MusicPlayerController>(force: true);
-    Get.put(MusicPlayerController(selectedMusic: selectedMusic, musicIndex: currentMusicIndex));
+    Get.put(MusicPlayerController(selectedMusic: selectedMusic, musicIndex: currentMusicIndex,isPlayMusic:isPlayMusic));
   }
 
   @override
