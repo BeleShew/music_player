@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import '../model/songs_model.dart';
 import '../util/play_music.dart';
 import '../util/recent_music.dart';
@@ -9,12 +8,10 @@ class BottomNavBarController extends GetxController {
   int musicIndex=0;
   bool isPlaying=false;
   List<SongList>? selectedMusic;
-  // late AudioPlayer audioPlayer;
   String duration="";
   String position="";
   BottomNavBarController(){
     recentMusicList();
-    // audioPlayer=AudioPlayer();
     AudioPlayerSingleton.audioPlayer.durationStream.listen((event) {
       duration=event.toString().split(".")[0];
       update();

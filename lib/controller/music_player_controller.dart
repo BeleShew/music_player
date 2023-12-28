@@ -143,8 +143,8 @@ MusicPlayerController({required this.selectedMusic,required this.musicIndex,bool
   popUpMusicPlayer()async{
     try {
       await RecentMusics.saveRecentMusic(recent: RecentSongList(songList: selectedMusic,currentMusicIndex:musicIndex));
-      Get.back();
       update();
+      Get.back();
     } catch (e) {
       if (kDebugMode) {
         print(e);

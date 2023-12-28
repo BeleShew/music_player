@@ -51,6 +51,7 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: (){
+                      // AudioPlayerSingleton.playSongs();
                       controllers.playSongs();
                       controllers.update();
                     },
@@ -59,8 +60,7 @@ class BottomNavBar extends StatelessWidget {
                   const SizedBox(width: 20,),
                   InkWell(
                     onTap: (){
-                      // controllers.musicIndex=controllers.musicIndex;
-                      // controllers.selectedMusic=controllers.selectedMusic??[];
+                      // AudioPlayerSingleton.playNextSong();
                       controllers.playNextSong();
                       controllers.update();
                     },
