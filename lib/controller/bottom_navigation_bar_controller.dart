@@ -27,6 +27,7 @@ class BottomNavBarController extends GetxController {
     });
     update();
   }
+
   recentMusicList()async {
     try {
       var recentSong= await RecentMusics.getRecentMusic();

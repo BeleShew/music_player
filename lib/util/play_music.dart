@@ -1,6 +1,13 @@
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/util/recent_music.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import '../controller/home_controller.dart';
+import '../model/songs_model.dart';
+import '../widget/bottom_navigation_bar.dart';
 
 class AudioPlayerSingleton {
   static final OnAudioQuery _onAudioQuery = OnAudioQuery();
@@ -8,88 +15,152 @@ class AudioPlayerSingleton {
   static AudioPlayer get audioPlayer => _audioPlayer;
   static OnAudioQuery get audioQuery => _onAudioQuery;
 
-  // static String duration="";
-  // static String position="";
-  // static List<SongList>? musicList;
-  // static int  musicIndex=0;
-  // static init(){
-  //   audioPlayer.durationStream.listen((event) {
-  //     duration=event.toString().split(".")[0];
-  //   });
-  //   audioPlayer.positionStream.listen((event){
-  //     position=event.toString().split(".")[0];
-  //     if(audioPlayer.playing&& position==duration){
-  //       Future.delayed(const Duration(milliseconds: 200),()async{
-  //         await playNextSong();
-  //       });
-  //     }
-  //   });
-  // }
-  // static playSongs()async{
-  //   try{
-  //     if(audioPlayer.playing){
-  //       audioPlayer.pause();
-  //     }else{
-  //       await AudioPlayerSingleton.audioPlayer.setUrl(musicList?[musicIndex].uri??"",initialPosition:position.isNotEmpty?_parseDuration(position):const Duration(seconds: 0));
-  //       await AudioPlayerSingleton.audioPlayer.play();
-  //     }
-  //   }catch(e){
-  //     if (kDebugMode) {
-  //       print(e);
-  //     }
-  //   }
-  // }
-  // static playNextSong()async{
-  //   try{
-  //     await AudioPlayerSingleton.audioPlayer.pause();
-  //     if (musicList!=null &&musicIndex < musicList!.length-1) {
-  //       musicIndex++;
-  //     }
-  //     else {
-  //       musicIndex = 0;
-  //     }
-  //     musicIndex=musicIndex.clamp(0, musicList?.length??0-1);
-  //     position="";
-  //     await RecentMusics.saveRecentMusic(recent: RecentSongList(songList: musicList,currentMusicIndex:musicIndex));
-  //     var updatenavBar= Get.find<BottomNavBarController>();
-  //     updatenavBar.recentMusicList();
-  //     await playSongs();
-  //   }catch(e){
-  //     if (kDebugMode) {
-  //       print(e);
-  //     }
-  //   }
-  // }
-  // static playPreviousSong()async{
-  //   try{
-  //     await AudioPlayerSingleton.audioPlayer.pause();
-  //     if (musicIndex > 0) {
-  //       musicIndex--;
-  //     }
-  //     else {
-  //       musicIndex = musicList?.length??0 - 1;
-  //     }
-  //     musicIndex=musicIndex.clamp(0, musicList?.length??0-1);
-  //     position="";
-  //     await playSongs();
-  //   }catch(e){
-  //     if (kDebugMode) {
-  //       print(e);
-  //     }
-  //   }
-  // }
-  // static Duration _parseDuration(String timeString) {
-  //   List<String> parts = timeString.split(':');
-  //   if (parts.length == 3) {
-  //     int hours = int.parse(parts[0]);
-  //     int minutes = int.parse(parts[1]);
-  //     int seconds = int.parse(parts[2]);
-  //     return Duration(hours: hours, minutes: minutes, seconds: seconds);
-  //   } else {
-  //     throw const FormatException("Invalid time duration format");
-  //   }
-  // }
-  // static isMusicplaying(){
-  //   return audioPlayer.playing;
-  // }
+  static String duration="";
+  static String position="";
+  static List<SongList>? selectedMusic;
+  static int  musicIndex=0;
+  static bool isPlaying=false;
+  static bool isRepeatEnabled=false;
+  static double sliderValue = 0.0;
+  static double max=0;
+
+  static init()async {
+    audioPlayer.durationStream.listen((event) {
+      duration=event.toString().split(".")[0];
+      max=event?.inSeconds.toDouble()??0;
+    });
+    audioPlayer.positionStream.listen((event)async{
+      position=event.toString().split(".")[0];
+      sliderValue=event.inSeconds.toDouble().clamp(0, max);
+      if(isPlaying&& position==duration){
+        isPlaying=false;
+        await playNextSong();
+      }
+    });
+
+    await recentMusicList();
+  }
+  static Duration parseDuration(String timeString) {
+    List<String> parts = timeString.split(':');
+    if (parts.length == 3) {
+      int hours = int.parse(parts[0]);
+      int minutes = int.parse(parts[1]);
+      int seconds = int.parse(parts[2]);
+      return Duration(hours: hours, minutes: minutes, seconds: seconds);
+    } else {
+      throw const FormatException("Invalid time duration format");
+    }
+  }
+  static playSongs({bool isNewMusic=false})async{
+    try{
+      if(isNewMusic){
+        max=0;
+        duration="";
+        position="";
+        sliderValue=0;
+        isPlaying=false;
+      }
+      if(audioPlayer.playing){
+        audioPlayer.pause();
+        isPlaying=false;
+      }
+      else{
+        isPlaying=true;
+        await audioPlayer.setUrl(selectedMusic?[musicIndex].uri??"",initialPosition:position.isNotEmpty?parseDuration(position):const Duration(seconds: 0));
+        await audioPlayer.play();
+      }
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+  static playNextSong()async{
+    try{
+      await audioPlayer.pause();
+      if (selectedMusic!=null &&musicIndex < selectedMusic!.length-1) {
+        musicIndex++;
+      }
+      else {
+        musicIndex = 0;
+      }
+      musicIndex=musicIndex.clamp(0, selectedMusic?.length??0-1);
+      position="";
+      max=0;
+      duration="";
+      sliderValue=0;
+      await RecentMusics.saveRecentMusic(recent: RecentSongList(songList: selectedMusic,currentMusicIndex:musicIndex));
+      await updateBottomNavBar();
+      await playSongs();
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+  static playPreviousSong()async{
+    try{
+      await audioPlayer.pause();
+      if (musicIndex > 0) {
+        musicIndex--;
+      }
+      else {
+        musicIndex = selectedMusic?.length??0 - 1;
+      }
+      musicIndex=musicIndex.clamp(0, selectedMusic?.length??0-1);
+      max=0;
+      duration="";
+      position="";
+      sliderValue=0;
+      await updateBottomNavBar();
+      await playSongs();
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+  static recentMusicList()async {
+    try {
+      var recentSong= await RecentMusics.getRecentMusic();
+      if(recentSong.songList!=null &&recentSong.songList!.isNotEmpty){
+        selectedMusic=recentSong.songList??[];
+        musicIndex=recentSong.currentMusicIndex??0;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+  static updateBottomNavBar()async {
+    var homeController=Get.put(HomeController());
+    homeController.bottomNavBarWidget=await CustomNavBar.navBar();
+    homeController.update();
+  }
+  static repeatMusic() async{
+    try {
+      max=0;
+      duration="";
+      position="";
+      sliderValue=0;
+      await playSongs();
+      updateBottomNavBar();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+  static changeDurationToSecond(second){
+    var durations=Duration(seconds: second);
+    AudioPlayerSingleton.audioPlayer.seek(durations);
+  }
+  static resetPlayer() async{
+    max=0;
+    duration="";
+    position="";
+    sliderValue=0;
+    isPlaying=false;
+  }
 }

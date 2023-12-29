@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import 'package:music_player/controller/album_details_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../controller/home_controller.dart';
 import '../model/songs_model.dart';
+import '../util/play_music.dart';
+import '../util/recent_music.dart';
 import 'music_player_page.dart';
 
 class AlbumDetailsPage extends StatelessWidget {
@@ -44,7 +47,10 @@ class AlbumDetailsPage extends StatelessWidget {
                       title: Text(controller.songList[index].title??"",style:const TextStyle(fontWeight: FontWeight.bold),),
                       subtitle: Text(controller.songList[index].artist??""),
                       onTap: () async{
-                        Get.to(()=>MusicPlayer(selectedMusic: controller.songList,currentMusicIndex: index,isPlayMusic: true,));
+                        await RecentMusics.saveRecentMusic(recent: RecentSongList(songList:controller.songList,currentMusicIndex:index));
+                        await AudioPlayerSingleton.recentMusicList();
+                        await AudioPlayerSingleton.audioPlayer.pause();
+                        Get.to(MusicPlayer(callBack: (widget)async{await AudioPlayerSingleton.updateBottomNavBar();},));
                       },
                     );
                   }):

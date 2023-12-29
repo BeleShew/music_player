@@ -2,36 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player/controller/title_controller.dart';
 
-import '../model/songs_model.dart';
-import '../util/constants.dart';
-import '../util/shared_preferences/shared_preferences.dart';
+import '../widget/bottom_navigation_bar.dart';
 
 class HomeController extends GetxController {
   ThemeMode themeMode =ThemeMode.dark;
   bool isDarkTheme=true;
-
   Widget currentWidget=Get.put(TitleController()).homepage;
-  HomeController(){
-    // recentMusicList();
-  }
+  Widget bottomNavBarWidget=Container();
   updateThemeMode({required ThemeMode themeModes}){
     themeMode=themeModes;
     update();
   }
-//   recentMusicList()async {
-//     try {
-//       await Sharedpreferences.initSharedPreference();
-//       var recentSong=await Sharedpreferences.getStringValuesSF(key: CatchConstantKeys.recentSongListKey);
-//       if(recentSong!=null){
-//         var decodedRecentSong= recentSongListFromJson(recentSong);
-//         if(decodedRecentSong.songList!=null &&decodedRecentSong.songList!.isNotEmpty){
-//           selectedMusic=decodedRecentSong.songList??[];
-//           musicIndex=decodedRecentSong.currentMusicIndex??0;
-//         }
-//       }
-//       update();
-//     } catch (e) {
-//       print(e);
-//     }
-// }
+
+  @override
+  void onInit() async{
+    super.onInit();
+    bottomNavBarWidget=await CustomNavBar.navBar();
+    update();
+  }
 }

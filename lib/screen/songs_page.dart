@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_player/controller/home_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../controller/songs_controller.dart';
 import '../model/songs_model.dart';
+import '../util/play_music.dart';
+import '../util/recent_music.dart';
+import '../widget/bottom_navigation_bar.dart';
 import 'music_player_page.dart';
 
 class SongsPage extends StatelessWidget {
@@ -33,7 +37,16 @@ class SongsPage extends StatelessWidget {
                       title: Text(controller.simplifiedSongs.songList?[index].title??"",style:const TextStyle(fontWeight: FontWeight.bold),),
                       subtitle: Text(controller.simplifiedSongs.songList?[index].artist??""),
                       onTap: () async{
-                        Get.to(()=>MusicPlayer(selectedMusic: controller.simplifiedSongs.songList??[], currentMusicIndex: index,isPlayMusic: true,));
+                        // Get.to(()=>MusicPlayer(selectedMusic: controller.simplifiedSongs.songList??[], currentMusicIndex: index,isPlayMusic: true,callBack: (widget)async{
+                        //   // await AudioPlayerSingleton.updateBottomNavBar();
+                        // },));
+
+                        await RecentMusics.saveRecentMusic(recent: RecentSongList(songList:controller.simplifiedSongs.songList??[],currentMusicIndex:index));
+                        await AudioPlayerSingleton.recentMusicList();
+                        await AudioPlayerSingleton.audioPlayer.pause();
+                        Get.to(MusicPlayer(callBack: (widget)async{await AudioPlayerSingleton.updateBottomNavBar();},));
+
+
                       },
                     );
                   }):
