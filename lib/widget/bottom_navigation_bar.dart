@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../screen/music_player_page.dart';
@@ -44,7 +45,19 @@ class CustomNavBar {
             ),
             InkWell(
               onTap: ()async{
-               await AudioPlayerSingleton.playSongs();
+                try {
+                  if(AudioPlayerSingleton.isPlaying){
+                    await AudioPlayerSingleton.audioPlayer.pause();
+                    AudioPlayerSingleton.isPlaying=false;
+                  }
+                  else{
+                    await AudioPlayerSingleton.playSongs(isNewMusic:false);
+                  }
+                } catch (e) {
+                  if (kDebugMode) {
+                    print(e);
+                  }
+                }
               },
               child:AudioPlayerSingleton.isPlaying?const Icon(Icons.pause_circle_outlined,size: 35,) : const Icon(Icons.play_circle_outline_rounded, size: 35,),
             ),

@@ -37,16 +37,10 @@ class SongsPage extends StatelessWidget {
                       title: Text(controller.simplifiedSongs.songList?[index].title??"",style:const TextStyle(fontWeight: FontWeight.bold),),
                       subtitle: Text(controller.simplifiedSongs.songList?[index].artist??""),
                       onTap: () async{
-                        // Get.to(()=>MusicPlayer(selectedMusic: controller.simplifiedSongs.songList??[], currentMusicIndex: index,isPlayMusic: true,callBack: (widget)async{
-                        //   // await AudioPlayerSingleton.updateBottomNavBar();
-                        // },));
-
                         await RecentMusics.saveRecentMusic(recent: RecentSongList(songList:controller.simplifiedSongs.songList??[],currentMusicIndex:index));
                         await AudioPlayerSingleton.recentMusicList();
                         await AudioPlayerSingleton.audioPlayer.pause();
                         Get.to(MusicPlayer(callBack: (widget)async{await AudioPlayerSingleton.updateBottomNavBar();},));
-
-
                       },
                     );
                   }):
