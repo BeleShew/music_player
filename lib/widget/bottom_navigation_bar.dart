@@ -7,9 +7,8 @@ class CustomNavBar {
   static Future<Widget> navBar() async{
    await AudioPlayerSingleton.recentMusicList();
    return InkWell(
-      onTap: (){
+      onTap: ()async{
         Get.to(()=>MusicPlayer(isAlreadyPlayMusic: true,callBack: (widget){
-
         },));
       },
       child: Container(

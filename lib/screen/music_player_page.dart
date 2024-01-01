@@ -5,14 +5,12 @@ import 'package:get/get.dart';
 import 'package:music_player/controller/music_player_controller.dart';
 import 'package:music_player/widget/bottom_navigation_bar.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import '../model/songs_model.dart';
 import '../util/color.dart';
 import '../util/play_music.dart';
-import '../util/recent_music.dart';
 typedef MusicPlayerCallBack = void Function(Widget currentMusicWidget);
 class MusicPlayer extends StatelessWidget {
   MusicPlayer({required this.callBack,bool isAlreadyPlayMusic=false}) {
-    Get.delete<MusicPlayerController>(force: true);
+    // Get.delete<MusicPlayerController>(force: true);
     Get.put(MusicPlayerController(isAlreadyInPlay:isAlreadyPlayMusic));
   }
   MusicPlayerCallBack callBack;
@@ -50,6 +48,7 @@ class MusicPlayer extends StatelessWidget {
                   child: QueryArtworkWidget(
                     artworkFit: BoxFit.fitWidth,
                     id: logic.selectedMusic[logic.musicIndex].id ?? 0,
+                    // id: AudioPlayerSingleton.selectedMusic?[AudioPlayerSingleton.musicIndex].id ?? 0,
                     type: ArtworkType.AUDIO,
                     artworkHeight: double.infinity,
                     artworkWidth: double.infinity,
@@ -84,11 +83,11 @@ class MusicPlayer extends StatelessWidget {
                         const SizedBox(height: 30,),
                         Text(
                           logic.selectedMusic[logic.musicIndex].title ?? "",
+                          // AudioPlayerSingleton.selectedMusic?[AudioPlayerSingleton.musicIndex].title ?? "",
                           style: const TextStyle(fontSize: 20,
                               fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10,),
-                        // Text(selectedMusic.artist??"",style: TextStyle(fontSize: 14,fontWeight: FontWeight.normal),),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -127,7 +126,8 @@ class MusicPlayer extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () async {
-                                AudioPlayerSingleton.playSongs(isNewMusic:true);
+                                await logic.playSong();
+                                // AudioPlayerSingleton.playSongs(isNewMusic:true);
                               },
                               child: AudioPlayerSingleton.isPlaying
                                   ? const Icon(

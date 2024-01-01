@@ -32,14 +32,14 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
     // AudioPlayerSingleton.audioPlayer.dispose();
     // AudioPlayerSingleton.audioPlayer.stop();
   }
-  repeatMusic() async{
+  playSong() async{
     try {
-      max=0;
-      duration="";
-      position="";
-      sliderValue=0;
-      isPlaying=true;
-      await playSongs();
+      if(AudioPlayerSingleton.isPlaying){
+        await AudioPlayerSingleton.audioPlayer.pause();
+        AudioPlayerSingleton.isPlaying=false;
+      }else{
+       await AudioPlayerSingleton.playSongs(isNewMusic:false);
+      }
       update();
     } catch (e) {
       if (kDebugMode) {
@@ -49,7 +49,9 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
   }
   playNextSong()async{
     try{
-      await AudioPlayerSingleton.audioPlayer.pause();
+      // if(AudioPlayerSingleton.isPlaying){
+      //   await AudioPlayerSingleton.audioPlayer.pause();
+      // }
       if (musicIndex < selectedMusic.length-1) {
         musicIndex++;
       }
@@ -71,7 +73,9 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
   }
   playPreviousSong()async{
   try{
-    await AudioPlayerSingleton.audioPlayer.pause();
+    // if(AudioPlayerSingleton.isPlaying){
+    //   await AudioPlayerSingleton.audioPlayer.pause();
+    // }
     if (musicIndex > 0) {
       musicIndex--;
     }
@@ -82,6 +86,7 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
     AudioPlayerSingleton.selectedMusic=selectedMusic;
     AudioPlayerSingleton.musicIndex=musicIndex;
     await RecentMusics.saveRecentMusic(recent: RecentSongList(songList: selectedMusic,currentMusicIndex:musicIndex));
+    // await AudioPlayerSingleton.recentMusicList();
     await AudioPlayerSingleton.updateBottomNavBar();
     await AudioPlayerSingleton.playSongs();
     update();
@@ -96,39 +101,55 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
     AudioPlayerSingleton.audioPlayer.seek(durations);
     update();
   }
-  Duration parseDuration(String timeString) {
-  if(timeString.isNotEmpty){
-    List<String> parts = timeString.split(':');
-    if (parts.length == 3) {
-      int hours = int.parse(parts[0]);
-      int minutes = int.parse(parts[1]);
-      int seconds = int.parse(parts[2]);
-      return Duration(hours: hours, minutes: minutes, seconds: seconds);
-    } else {
-      throw const FormatException("Invalid time duration format");
-    }
-  }else{
-    throw const FormatException("Invalid time duration format");
-  }
 
-  }
-  playSongs()async{
-    try{
-      if(AudioPlayerSingleton.audioPlayer.playing){
-        AudioPlayerSingleton.audioPlayer.pause();
-        isPlaying=false;
-      }
-      else{
-        await CustomNavBar.navBar();
-        await AudioPlayerSingleton.updateBottomNavBar();
-        await AudioPlayerSingleton.audioPlayer.setUrl(selectedMusic[musicIndex].uri??"",initialPosition:position.isNotEmpty?parseDuration(position):const Duration(seconds: 0));
-        await AudioPlayerSingleton.updateBottomNavBar();
-        await AudioPlayerSingleton.audioPlayer.play();
-      }
-    }catch(e){
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
+  // Duration parseDuration(String timeString) {
+  // if(timeString.isNotEmpty){
+  //   List<String> parts = timeString.split(':');
+  //   if (parts.length == 3) {
+  //     int hours = int.parse(parts[0]);
+  //     int minutes = int.parse(parts[1]);
+  //     int seconds = int.parse(parts[2]);
+  //     return Duration(hours: hours, minutes: minutes, seconds: seconds);
+  //   } else {
+  //     throw const FormatException("Invalid time duration format");
+  //   }
+  // }else{
+  //   throw const FormatException("Invalid time duration format");
+  // }
+  //
+  // }
+  // playSongs()async{
+  //   try{
+  //     if(AudioPlayerSingleton.audioPlayer.playing){
+  //       AudioPlayerSingleton.audioPlayer.pause();
+  //       isPlaying=false;
+  //     }
+  //     else{
+  //       await CustomNavBar.navBar();
+  //       await AudioPlayerSingleton.updateBottomNavBar();
+  //       await AudioPlayerSingleton.audioPlayer.setUrl(selectedMusic[musicIndex].uri??"",initialPosition:position.isNotEmpty?parseDuration(position):const Duration(seconds: 0));
+  //       await AudioPlayerSingleton.updateBottomNavBar();
+  //       await AudioPlayerSingleton.audioPlayer.play();
+  //     }
+  //   }catch(e){
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //   }
+  // }
+// repeatMusic() async{
+//   try {
+//     max=0;
+//     duration="";
+//     position="";
+//     sliderValue=0;
+//     isPlaying=true;
+//     await playSongs();
+//     update();
+//   } catch (e) {
+//     if (kDebugMode) {
+//       print(e);
+//     }
+//   }
+// }
 }

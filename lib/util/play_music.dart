@@ -64,11 +64,9 @@ class AudioPlayerSingleton {
         audioPlayer.pause();
         isPlaying=false;
       }
-      else{
-        isPlaying=true;
-        await audioPlayer.setUrl(selectedMusic?[musicIndex].uri??"",initialPosition:position.isNotEmpty?parseDuration(position):const Duration(seconds: 0));
-        await audioPlayer.play();
-      }
+      isPlaying=true;
+      await audioPlayer.setUrl(selectedMusic?[musicIndex].uri??"",initialPosition:position.isNotEmpty?parseDuration(position):const Duration(seconds: 0));
+      await audioPlayer.play();
     }catch(e){
       if (kDebugMode) {
         print(e);
