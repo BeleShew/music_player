@@ -35,11 +35,13 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
   playSong() async{
     try {
       if(AudioPlayerSingleton.isPlaying){
-        await AudioPlayerSingleton.audioPlayer.pause();
+         AudioPlayerSingleton.audioPlayer.pause();
         AudioPlayerSingleton.isPlaying=false;
-      }else{
-       await AudioPlayerSingleton.playSongs(isNewMusic:false);
       }
+      else{
+        AudioPlayerSingleton.playSongs(isNewMusic:false);
+      }
+      await AudioPlayerSingleton.updateBottomNavBar();
       update();
     } catch (e) {
       if (kDebugMode) {
@@ -101,55 +103,4 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
     AudioPlayerSingleton.audioPlayer.seek(durations);
     update();
   }
-
-  // Duration parseDuration(String timeString) {
-  // if(timeString.isNotEmpty){
-  //   List<String> parts = timeString.split(':');
-  //   if (parts.length == 3) {
-  //     int hours = int.parse(parts[0]);
-  //     int minutes = int.parse(parts[1]);
-  //     int seconds = int.parse(parts[2]);
-  //     return Duration(hours: hours, minutes: minutes, seconds: seconds);
-  //   } else {
-  //     throw const FormatException("Invalid time duration format");
-  //   }
-  // }else{
-  //   throw const FormatException("Invalid time duration format");
-  // }
-  //
-  // }
-  // playSongs()async{
-  //   try{
-  //     if(AudioPlayerSingleton.audioPlayer.playing){
-  //       AudioPlayerSingleton.audioPlayer.pause();
-  //       isPlaying=false;
-  //     }
-  //     else{
-  //       await CustomNavBar.navBar();
-  //       await AudioPlayerSingleton.updateBottomNavBar();
-  //       await AudioPlayerSingleton.audioPlayer.setUrl(selectedMusic[musicIndex].uri??"",initialPosition:position.isNotEmpty?parseDuration(position):const Duration(seconds: 0));
-  //       await AudioPlayerSingleton.updateBottomNavBar();
-  //       await AudioPlayerSingleton.audioPlayer.play();
-  //     }
-  //   }catch(e){
-  //     if (kDebugMode) {
-  //       print(e);
-  //     }
-  //   }
-  // }
-// repeatMusic() async{
-//   try {
-//     max=0;
-//     duration="";
-//     position="";
-//     sliderValue=0;
-//     isPlaying=true;
-//     await playSongs();
-//     update();
-//   } catch (e) {
-//     if (kDebugMode) {
-//       print(e);
-//     }
-//   }
-// }
 }
