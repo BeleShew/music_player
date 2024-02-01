@@ -4,10 +4,9 @@ import 'package:get/get.dart';
 import 'package:music_player/util/play_music.dart';
 import '../model/songs_model.dart';
 import '../util/recent_music.dart';
-import '../widget/bottom_navigation_bar.dart';
 
 class MusicPlayerController extends GetxController {
-bool isPlaying=false;
+// bool isPlaying=false;
 bool isRepeatEnabled=false;
 double sliderValue = 0.0;
 String duration="";
@@ -51,9 +50,6 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
   }
   playNextSong()async{
     try{
-      // if(AudioPlayerSingleton.isPlaying){
-      //   await AudioPlayerSingleton.audioPlayer.pause();
-      // }
       if (musicIndex < selectedMusic.length-1) {
         musicIndex++;
       }
@@ -75,9 +71,6 @@ MusicPlayerController({bool isAlreadyInPlay=false}) {
   }
   playPreviousSong()async{
   try{
-    // if(AudioPlayerSingleton.isPlaying){
-    //   await AudioPlayerSingleton.audioPlayer.pause();
-    // }
     if (musicIndex > 0) {
       musicIndex--;
     }

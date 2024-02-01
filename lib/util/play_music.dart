@@ -3,13 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_player/controller/music_player_controller.dart';
 import 'package:music_player/util/recent_music.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import '../controller/home_controller.dart';
 import '../model/songs_model.dart';
 import '../widget/bottom_navigation_bar.dart';
 
-class AudioPlayerSingleton {
+class AudioPlayerSingleton extends GetxController {
   static final OnAudioQuery _onAudioQuery = OnAudioQuery();
   static final AudioPlayer _audioPlayer = AudioPlayer();
   static AudioPlayer get audioPlayer => _audioPlayer;
@@ -25,6 +26,7 @@ class AudioPlayerSingleton {
   static double max=0;
 
   static init()async {
+    Get.delete<MusicPlayerController>(force: true);
     audioPlayer.durationStream.listen((event) {
       duration=event.toString().split(".")[0];
       max=event?.inSeconds.toDouble()??0;
